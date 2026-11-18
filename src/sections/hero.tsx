@@ -6,10 +6,10 @@ function Hero(){
             <div className='max-w-5xl w-full grid grid-cols-1 items-center'>
                 <div className='text-white font-istok'>
                     <p className='font-bold text-blue-500 text-lg mb-2'>Wuthering Waves Pilot Service</p>
-                    <h1 className='font-bold text-4xl leading-tight mb-2'>Skip the exploration and grind <br/> Keep the rewards</h1>
-                    <p>
-                        Struggling with the grind? No time to play? Or just not in the mood for <br />
-                        in-game chores? No worries—I’ve got you covered. I’m here to assist you <br />
+                    <h1 className='font-bold text-4xl leading-tight mb-2'>Skip the grind, keep the rewards</h1>
+                    <p className='max-w-xl'>
+                        Struggling with the grind? No time to play? Or just not in the mood for
+                        in-game chores? No worries, I’ve got you covered. I’m here to assist you
                         and make your progress effortless.
                     </p>
                     <br />
