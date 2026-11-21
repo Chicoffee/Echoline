@@ -1,12 +1,19 @@
 import type { ServiceItem } from "../../types/service"
 
-type ServiceCardProps = ServiceItem;
+type ServiceCardProps = ServiceItem & {
+    isAdded: boolean;
+    onAddToCart: () => void;
+    onRemoveFromCart: () => void;
+};
 
 export default function ServiceCard({
     title,
     image,
     price,
     features,
+    isAdded,
+    onAddToCart,
+    onRemoveFromCart,
 }: ServiceCardProps) {
     return(
         <div className='relative h-64 overflow-hidden rounded-2xl hover:-translate-y-2 duration-300 transition-all'>
@@ -21,10 +28,20 @@ export default function ServiceCard({
                             <li key={f}>{f}</li>
                         ))}
                     </ul>
-
-                    <span className='shrink-0 text-xl font-bold text-white font-istok'>
-                        &#8369;{price.toLocaleString()}
-                    </span>
+                    
+                    <div className='flex shrink-0 flex-col items-end gap-2'>
+                        <span className='text-xl font-bold text-white font-istok'>
+                            &#8369;{price.toLocaleString()}
+                        </span>
+                        
+                        <button 
+                            type='button'
+                            onClick={isAdded ? onRemoveFromCart : onAddToCart}
+                            className='cursor-pointer rounded-lg bg-blue-500 px-3 py-1.5 text-xs font-bold font-istok text-white transition hover:bg-blue-400'>
+                                {isAdded ? "Remove" : "Avail now"}
+                        </button>
+                    </div>
+                    
                 </div>
             </div>
         </div>

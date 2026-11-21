@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 
-function Navbar(){
+export default function Navbar(){
     const [menuOpen, setMenuOpen] = useState(false); 
 
     return(
@@ -18,7 +18,7 @@ function Navbar(){
                         </ul>
                     </div>
 
-                    <button onClick={() => setMenuOpen(!menuOpen)} aria-label='Toggle menu' aria-expanded={menuOpen} className='md:hidden flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-100'>
+                    <button onClick={() => setMenuOpen(!menuOpen)} aria-label='Toggle menu' aria-expanded={menuOpen} className='md:hidden flex items-center justify-center w-10 h-10'>
                         {menuOpen ? <X size={20} className='text-white'/> : <Menu size={20} className='text-white'/>}
                     </button> 
                 </div>
@@ -33,5 +33,3 @@ function Navbar(){
         </nav>
     );
 }
-
-export default Navbar

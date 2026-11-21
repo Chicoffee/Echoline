@@ -10,6 +10,15 @@
     --font-istok: "Istok Web", system-ui;
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 html {
     scroll-behavior: smooth;
 }

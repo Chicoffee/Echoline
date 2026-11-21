@@ -1,6 +1,6 @@
 import { FaFacebook, FaTiktok, FaXTwitter, FaDiscord } from 'react-icons/fa6'
 
-function Hero(){
+export default function Hero(){
     return(
         <div id='hero' className='flex items-center justify-center p-8 scroll-mt-24'>
             <div className='max-w-5xl w-full grid grid-cols-1 items-center'>
@@ -33,5 +33,3 @@ function Hero(){
         </div>
     );
 }
-
-export default Hero
