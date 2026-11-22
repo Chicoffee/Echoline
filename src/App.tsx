@@ -66,8 +66,10 @@ export default function App() {
       {isOrderModalOpen && (
         <ConfirmModal
           cart={cart}
-          total={total}
-          onClose={() => setIsOrderModalOpen(false)}/>
+          onClose={() => setIsOrderModalOpen(false)}
+          onRemove={(id) => setCart((prev) => prev.filter((s) => s.id !== id))}
+          onConfirm={(items) => console.log(items)}
+        />
       )}
     </div>
   );

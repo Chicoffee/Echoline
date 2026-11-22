@@ -4,7 +4,7 @@ An online service shop for Wuthering Waves players. Browse priced services, buil
 
 Features
 Service catalog: region exploration, Echo farming, story and Union Level, daily upkeep, and a Full map bundle, each with a price and time estimate
-My list: add and remove services, toggle Express, apply a promo code (try WAVE10)
+My list: add and remove services, toggle Express, apply a promo code
 Live total: bundle discount, Express fee and promo update as you choose
 Receipt: order number, masked UID, line items and total
 Share shortcuts: Facebook, Messenger, Discord, Telegram, copy link, save image

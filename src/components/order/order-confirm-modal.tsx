@@ -1,26 +1,54 @@
-import { X } from 'lucide-react'
-import { useEffect } from 'react'
+import { X, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import type { ServiceItem } from '../../types/service'
 
 type OrderConfirmModalProps = {
     cart: ServiceItem[];
-    total: number;
     onClose: () => void;
+    onRemove: (id: ServiceItem['id']) => void;
+    onConfirm?: (items: { service: ServiceItem; quantity: number} []) => void;
 };
 
 export default function ConfirmModal({
     cart,
     onClose,
+    onRemove,
+    onConfirm,
 }: OrderConfirmModalProps){
     useEffect(() => {
         const originalOverflow = document.body.style.overflow;
 
-    document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
 
-    return () => {
-        document.body.style.overflow = originalOverflow;
-    };
+        return () => {
+            document.body.style.overflow = originalOverflow;
+        };
     }, []);
+
+    const [quantities, setQuantities] = useState<Record<ServiceItem['id'], string>>({});
+
+    const getInputValue = (id: ServiceItem['id']) => quantities[id] ?? '1';
+
+    const getQty = (id: ServiceItem['id']) => {
+        const n = Number(quantities[id] ?? 1);
+        return Number.isFinite(n) && n >= 1 ? Math.min(99, Math.floor(n)) : 1;
+    }
+
+    const handleQtyChange = (id: ServiceItem['id'], value: string) => {
+        if (value === '' || /^\d{1,2}$/.test(value)) {
+            setQuantities((prev) => ({ ...prev, [id]: value }));
+        }
+    };
+
+    const handleQtyBlur = (id: ServiceItem['id']) => {
+        setQuantities((prev) => ({...prev, [id]: String(getQty(id)) }));
+    };
+
+    const total = cart.reduce((sum, s) => sum + s.price *getQty(s.id), 0);
+
+    const handleConfirm = () => {
+        onConfirm?.(cart.map((service) => ({service, quantity: getQty(service.id) })));
+    };
 
     return(
         <div 
@@ -51,23 +79,44 @@ export default function ConfirmModal({
                         {cart.map((service) => (
                             <li
                                 key={service.id}
-                                className='flex items-center justify-between gap-3 px-3 py-2'
+                                className='flex items-center gap-1 px-3 py-2'
                             >
-                                <div>
-                                    <p className='text-sm text-white'>{service.title}</p>
-                                    <p className='text-sm text-white/40'>Quantity: 1</p>
-                                </div>
+  
+                                <p className='min-w-0 flex-1 truncate text-sm text-white'>{service.title}</p>
+                                <label htmlFor={`qty-${service.id}`} className='text-sm text-white/40'></label>
+                                <input 
+                                    type="text"
+                                    inputMode='numeric'
+                                    id={`qty-${service.id}`}
+                                    value={getInputValue(service.id)}
+                                    onChange={(e) => handleQtyChange(service.id, e.target.value)}
+                                    onBlur={() => handleQtyBlur(service.id)}
+                                    className='w-16 shrink-0 rounded-md border border-white/20 bg-primary px-2 py-1 text-sm outline-none focues:bg-blue-500 text-center'
+                                />
 
-                                <span className='shrink-0 text-sm font-bold'>
-                                    &#8369;{service.price.toLocaleString()}
+                                <span className='w-24 pl-4 shrink-0 text-sm font-bold'>
+                                    &#8369;{(service.price * getQty(service.id)).toLocaleString()}
                                 </span>
+                                
+                                <button
+                                    type='button'
+                                    onClick={() => onRemove(service.id)}
+                                    aria-label={`Remove ${service.title}`}
+                                    className='shrink-0 cursor-pointer text-white transition hover:text-red-400'
+                                >
+                                    <Trash2 size={16}/>
+                                </button>
                             </li>
                         ))}
                     </ul>
                 </section>
 
                 <section className='mt-4 font-istok'>
-                    <h2 className='mb-4 border-l-3 border-blue-500 pl-2 text-md font-semibold'>Your Details</h2>
+                    <div className='mb-4 border-l-3 border-blue-500'>
+                        <h2 className=' pl-2 text-md font-semibold'>Your Details</h2>
+                        <p className='pl-2 text-xs text-white/40'>Further details will be discussed in chat. Never share your log in credentials.</p>
+                    </div>
+                    
 
                     <label htmlFor="uid" className='mb-1 block text-md text-white'>In-game UID*</label>
                     <input id='uid' type="text" required placeholder='Enter your in-game UID' className='w-full mb-4 rounded-md border border-white bg-primary px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-blue-500'/>
@@ -104,6 +153,22 @@ export default function ConfirmModal({
                         </label>
                     </div>
                 </section>
+                
+                <footer className='sticky -bottom-5 -mx-5 -mb-5 mt-6 flex items-center justify-between gap-4 border-t border-white/10 bg-layout px-5 py-4 font-istok'>
+                    <div>
+                        <p className='text-xs text-white/60'>Total</p>
+                        <p className='text-lg text-white font-bold'>&#8369;{total.toLocaleString()}</p>
+                    </div>
+
+                    <button
+                        type='button'
+                        onClick={handleConfirm}
+                        disabled={cart.length === 0}
+                        className='cursor-pointer rounded-md bg-blue-500 px-6 py-2 text-sm font-semibold text-white transition hover:bg-blue-600'
+                    >
+                        Confirm
+                    </button>
+                </footer>
             </div>
         </div>
     );
